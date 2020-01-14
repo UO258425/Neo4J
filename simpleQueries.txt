@@ -1,0 +1,2 @@
+MATCH (p:God )-[:PARENT]->(o) where o.gender="Female" RETURN DISTINCT p.name
+MATCH p=(:God)-[:MARRIED]->(o) where not o:God RETURN p,labels(o)

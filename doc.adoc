@@ -1,0 +1,47 @@
+Neo4J and Cypher assignment
+==============
+Carlos Manrique Enguita 
+Daniel Rückert García
+Violeta Ruiz Martínez
+15-01-2020
+:compat-mode!:
+
+[source,cypher]
+----
+MATCH (p:God )-[:PARENT]->(o) where o.gender="Female"
+RETURN DISTINCT p.name 
+----
+
+[source,cypher]
+----
+MATCH p=(:God)-[:MARRIED]->(o) where not o:God 
+RETURN p,labels(o) 
+----
+
+[source,cypher]
+----
+MATCH p = (:God {name:"Gaia"})-[:PARENT]->()<-[:PARENT]-(:God {name:"Uranus"}) 
+RETURN p 
+----
+
+[source,cypher]
+----
+MATCH p=(:God {name:"Zeus"})-[:PARENT]->(n)-[*]->(m)
+RETURN p 
+----
+
+[source,cypher]
+----
+CALL algo.pageRank.stream('God', 'MARRIED', {iterations:100, dampingFactor:0.85}) 
+YIELD nodeId, score 
+RETURN algo.asNode(nodeId).name AS page,score 
+ORDER BY score DESC 
+----
+
+[source,cypher]
+----
+MATCH (start:God{name:'Chaos'}), (end:God{name:'Aphrodite'}) 
+CALL algo.shortestPath.stream(start, end, null) 
+YIELD nodeId, cost 
+RETURN algo.asNode(nodeId).name AS name, cost 
+----
